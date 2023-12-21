@@ -28,6 +28,10 @@ body {
 	color: var(--textColorMain);
 }
 
+ul {
+	list-style-type: none;
+}
+
 .container {
 	max-width: 600px;
 	margin: 20px auto;
