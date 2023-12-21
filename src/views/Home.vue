@@ -1,46 +1,49 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { storeToRefs } from 'pinia'
-import { getMessages, isLoadingMessage } from '@/api/messages/MessageServices'
-import { MessageI } from '@/api/interfaces'
-import { filterObject } from '@/helpers/ArrayHelper'
-import { useChatStore } from '@/stores/useChatStore'
+import { onUnmounted } from 'vue'
 
-const chatStore = useChatStore()
-const { isLoading } = storeToRefs(chatStore)
+import { ArchiveBoxXMarkIcon } from '@heroicons/vue/24/solid'
+import { useMessage } from '@/composables/useMessage'
 
-const messages = ref<MessageI[]>([])
+const { isLoading, handleSubmit, body, messages, handleDelete, unsubscribe } =
+	await useMessage()
 
-enum EnumAction {
-	'create' = 'create',
-	'delete' = 'delete',
-}
-
-const { documents } = await getMessages()
-
-messages.value = documents
-
-console.log(documents)
-
-const changeMessages = (action: EnumAction, payload: unknown) => {
-	if (action === 'create') messages.value = [...messages.value, payload]
-	if (action === 'delete')
-		messages.value = filterObject(messages.value, payload.$id)
-}
+onUnmounted(() => unsubscribe())
 </script>
 <template>
 	<main class="container">
+		<div v-if="isLoading?.status">Loading ...</div>
 		<div class="room--container">
-			{{ isLoading }}
-			<ul>
+			<form id="message--form" @submit.prevent="handleSubmit">
+				<div>
+					<textarea
+						required
+						maxlength="250"
+						placeholder="Say something..."
+						v-model="body"
+					/>
+				</div>
+
+				<div class="send-btn--wrapper">
+					<input class="btn btn--secondary" type="submit" value="send" />
+				</div>
+			</form>
+			<ul style="margin-top: 20px">
 				<li
 					v-for="message in messages"
 					:key="message.$id"
 					class="messages--wrapper"
+					style="padding-bottom: 10px"
 				>
-					<p class="message--header">
-						<small class="message-timestamp">{{ message.$createdAt }}</small>
+					<p class="message--header" style="padding-bottom: 10px">
+						<small class="message-timestamp">{{
+							new Date(message.$createdAt).toLocaleString()
+						}}</small>
+						<ArchiveBoxXMarkIcon
+							class="delete--btn"
+							@click.prevent="handleDelete(message.$id as string)"
+						/>
 					</p>
+
 					<div class="message--body">
 						<span>{{ message.body }}</span>
 					</div>
@@ -51,4 +54,3 @@ const changeMessages = (action: EnumAction, payload: unknown) => {
 </template>
 
 <style scoped></style>
-@/api/messages/AppwriteServices

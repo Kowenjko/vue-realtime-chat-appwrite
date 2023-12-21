@@ -7,9 +7,9 @@ export const removeObjectAtIndex = (collection: any, index: number) => {
 }
 
 export const getIndexById = (collection: any, id: string) => {
-	return collection.findIndex((elem: any) => elem.id === id)
+	return collection.findIndex((elem: any) => elem.$id === id)
 }
 
 export const filterObject = (collection: any, id: string) => {
-	return collection.filter((elem: any) => elem.id === id)
+	return collection.filter((elem: any) => elem.$id !== id)
 }

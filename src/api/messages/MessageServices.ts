@@ -14,40 +14,40 @@ import { MessageI } from '@/api/interfaces'
 export const getMessages =
 	async (): Promise<Models.DocumentList<Models.Document> | void> => {
 		const { setIsLoading } = useChatStore()
-		setIsLoading(true)
+		setIsLoading('get', true)
 		try {
 			return await listDocuments()
 		} catch (e) {
 			handleException(e)
 		} finally {
-			setIsLoading(false)
+			setIsLoading('get', false)
 		}
 	}
 
 export const createMessage = async (
-	payload: MessageI,
+	payload: Partial<MessageI>,
 	userId: string
 ): Promise<Models.Document | void> => {
 	const { setIsLoading } = useChatStore()
-	setIsLoading(true)
+	setIsLoading('create', true)
 	try {
 		return await createDocument(payload, userId)
 	} catch (e) {
 		handleException(e)
 	} finally {
-		setIsLoading(false)
+		setIsLoading('create', false)
 	}
 }
 
 export const deleteMessage = async (messageId: string): Promise<{} | void> => {
 	const { setIsLoading } = useChatStore()
-	setIsLoading(true)
+	setIsLoading('delete', true)
 	try {
 		return await deleteDocument(messageId)
 	} catch (e) {
 		handleException(e)
 	} finally {
-		setIsLoading(false)
+		setIsLoading('delete', false)
 	}
 }
 

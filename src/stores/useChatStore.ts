@@ -1,10 +1,19 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
+
+type ActionT = 'get' | 'create' | 'delete' | 'auth'
+interface LoadingI {
+	status: boolean
+	action: ActionT
+}
 
 export const useChatStore = defineStore('chatStore', () => {
-	const isLoading = ref<boolean>(false)
+	const isLoading = reactive<LoadingI>({ status: false, action: 'get' })
 
-	const setIsLoading = (value: boolean) => (isLoading.value = value)
+	const setIsLoading = (action: ActionT, status: boolean) => {
+		isLoading.status = status
+		isLoading.action = action
+	}
 
 	return { isLoading, setIsLoading }
 })

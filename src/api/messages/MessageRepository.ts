@@ -30,15 +30,15 @@ export const listDocuments = async (): Promise<
  */
 
 export const createDocument = async (
-	payload: MessageI,
+	payload: Partial<MessageI>,
 	userId: string
 ): Promise<Models.Document> => {
 	return await databases.createDocument(
 		databaseID,
 		collectionID,
 		ID.unique(),
-		payload,
-		permissions(userId)
+		payload
+		// permissions(userId)
 	)
 }
 
@@ -74,6 +74,12 @@ export const subscribe = (callback: Function) => {
 			) {
 				console.log('A MESSAGE WAS DELETED!!!')
 				callback('delete', response.payload)
+			}
+			if (
+				response.events.includes('databases.*.collections.*.documents.*.update')
+			) {
+				console.log('A MESSAGE WAS UPDATE!!!')
+				callback('update', response.payload)
 			}
 		}
 	)
