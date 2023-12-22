@@ -11,12 +11,11 @@ const { handleUserLogin, isLoading, userInfo } = await useAuthUser()
 
 const forms = reactive<AuthI>({ email: '', password: '' })
 
-watch(userInfo, (value) => value && router.push('/'))
+watch(userInfo, (value) => (value ? router.push('/') : router.push('/login')))
 </script>
 <template>
 	<div class="auth--container">
 		<div class="form--wrapper">
-			<p v-if="isLoading.status">{{ isLoading.action }} ...</p>
 			<form @submit.prevent="handleUserLogin(forms)">
 				<div class="field--wrapper">
 					<label>Email:</label>

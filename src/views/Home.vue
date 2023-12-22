@@ -2,22 +2,19 @@
 import { onUnmounted } from 'vue'
 
 import Header from '@/components/Header.vue'
+import Pulse from '@/components/icons/Pulse.vue'
 
 import { ArchiveBoxXMarkIcon } from '@heroicons/vue/24/solid'
 import { useMessage } from '@/composables/useMessage'
 
-const { isLoading, handleSubmit, body, messages, handleDelete, unsubscribe,checkDeleteMessage } =
-	await useMessage()
-
-
-	
+const { isLoading, handleSubmit, body, messages, handleDelete, unsubscribe, checkDeleteMessage } =
+	await useMessage()	
 
 onUnmounted(() => unsubscribe())
 </script>
 <template>
-	<main class="container">
-		<Header />
-		<div v-if="isLoading?.status">{{ isLoading.action }} ...</div>
+	<div class="container">
+		<Header />		
 		<div class="room--container">
 			<form id="message--form" @submit.prevent="handleSubmit">
 				<div>
@@ -30,7 +27,11 @@ onUnmounted(() => unsubscribe())
 				</div>
 
 				<div class="send-btn--wrapper">
-					<input class="btn btn--secondary" type="submit" value="send" />
+					<div class="loading-wrapper" :class="{active: isLoading?.status&&isLoading?.action!=='auth'}">
+						<Pulse class="loading"/>
+						<span>{{ isLoading?.action }} message</span>
+					</div>
+					<button class="btn btn--secondary" style="align-self: flex-end;" type="submit" > Send </button>
 				</div>
 			</form>
 			<ul style="margin-top: 20px">
@@ -62,7 +63,22 @@ onUnmounted(() => unsubscribe())
 				</li>
 			</ul>
 		</div>
-	</main>
+	</div>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+.loading-wrapper{
+	display: flex;
+	align-items: center;
+	opacity: 0;
+	gap: 10px;
+}
+.loading{
+	width: 30px;
+}
+
+.active{
+	opacity: 1;
+}
+</style>
