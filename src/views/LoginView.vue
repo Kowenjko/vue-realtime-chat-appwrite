@@ -7,7 +7,7 @@ import { AuthI } from '@/api/interfaces'
 
 const router = useRouter()
 
-const { handleUserLogin, isLoading, userInfo } = await useAuthUser()
+const { handleUserLogin, userInfo } = await useAuthUser()
 
 const forms = reactive<AuthI>({ email: '', password: '' })
 

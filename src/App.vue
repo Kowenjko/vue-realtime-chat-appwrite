@@ -13,5 +13,3 @@ onMounted(async () => await accountDetails())
 		</layouts-default>
 	</suspense>
 </template>
-
-<style scoped></style>
