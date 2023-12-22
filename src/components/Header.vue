@@ -18,7 +18,9 @@ const LogoutUser = async () => {
 <template>
 	<div id="header--wrapper">
 		<div v-if="userInfo" class="user-info">
-			<p>Welcome {{ userInfo?.name }}</p>
+			<p>
+				Welcome <span class="header-username">{{ userInfo?.name }}</span>
+			</p>
 			<ArrowRightStartOnRectangleIcon
 				class="header--link icon"
 				@click="LogoutUser"

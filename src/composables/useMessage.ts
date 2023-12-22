@@ -23,7 +23,7 @@ export const useMessage = async () => {
 	const body = ref<string>('')
 
 	const chatStore = useChatStore()
-	const { isLoading } = storeToRefs(chatStore)
+	const { isLoading, userInfo } = storeToRefs(chatStore)
 
 	const { documents } = (await getMessages()) as any
 	messages.value = documents
@@ -41,12 +41,12 @@ export const useMessage = async () => {
 
 	const handleSubmit = async () => {
 		const payload: Partial<MessageI> = {
-			user_id: 'test',
-			username: 'TEst',
+			user_id: userInfo.value?.$id || '',
+			username: userInfo.value?.name || '',
 			body: body.value,
 		}
 
-		const response = await createMessage(payload, 'test')
+		const response = await createMessage(payload, userInfo.value?.$id!)
 		console.log('RESPONSE:', response)
 		body.value = ''
 	}
@@ -55,5 +55,16 @@ export const useMessage = async () => {
 
 	const unsubscribe = subscribeMessage(changeMessages)
 
-	return { isLoading, handleSubmit, body, messages, handleDelete, unsubscribe }
+	const checkDeleteMessage = (message: MessageI) =>
+		message.$permissions.includes(`delete(\"user:${userInfo.value?.$id}\")`)
+
+	return {
+		isLoading,
+		handleSubmit,
+		body,
+		messages,
+		handleDelete,
+		unsubscribe,
+		checkDeleteMessage,
+	}
 }

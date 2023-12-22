@@ -118,6 +118,10 @@ textarea {
 	border-bottom: none;
 }
 
+.header-username {
+	color: var(--themeColorMain);
+}
+
 .header--link {
 	color: #c7d8eb;
 	cursor: pointer;

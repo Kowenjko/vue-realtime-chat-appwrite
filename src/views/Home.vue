@@ -6,8 +6,11 @@ import Header from '@/components/Header.vue'
 import { ArchiveBoxXMarkIcon } from '@heroicons/vue/24/solid'
 import { useMessage } from '@/composables/useMessage'
 
-const { isLoading, handleSubmit, body, messages, handleDelete, unsubscribe } =
+const { isLoading, handleSubmit, body, messages, handleDelete, unsubscribe,checkDeleteMessage } =
 	await useMessage()
+
+
+	
 
 onUnmounted(() => unsubscribe())
 </script>
@@ -38,12 +41,18 @@ onUnmounted(() => unsubscribe())
 					style="padding-bottom: 10px"
 				>
 					<p class="message--header" style="padding-bottom: 10px">
-						<small class="message-timestamp">{{
-							new Date(message.$createdAt).toLocaleString()
-						}}</small>
+						<div>
+							<span>{{
+								message?.username ? message.username : 'Anonymous user'
+							}}</span>
+							<small class="message-timestamp">{{
+								new Date(message.$createdAt).toLocaleString()
+							}}</small>
+						</div>
 						<ArchiveBoxXMarkIcon
+						v-if="checkDeleteMessage(message)"
 							class="delete--btn"
-							@click.prevent="handleDelete(message.$id as string)"
+							@click.prevent="handleDelete(message.$id!)"
 						/>
 					</p>
 

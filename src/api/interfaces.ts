@@ -4,6 +4,7 @@ export interface MessageI {
 	user_id: string
 	username: string
 	$createdAt: string
+	$permissions: string
 }
 
 export interface AuthI {

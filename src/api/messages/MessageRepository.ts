@@ -6,7 +6,7 @@ import { MessageI } from '@/api/interfaces'
 
 const { databaseID, collectionID } = appwriteConfig
 
-const permissions = (UserId: string) => [Permission.write(Role.user(UserId))]
+const permissions = (userId: string) => [Permission.write(Role.user(userId))]
 
 /**
  * Get all documents
@@ -37,8 +37,8 @@ export const createDocument = async (
 		databaseID,
 		collectionID,
 		ID.unique(),
-		payload
-		// permissions(userId)
+		payload,
+		permissions(userId)
 	)
 }
 
