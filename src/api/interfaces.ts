@@ -6,4 +6,14 @@ export interface MessageI {
 	$createdAt: string
 }
 
-export interface UserI {}
+export interface AuthI {
+	name?: string
+	email: string
+	password: string
+	passwordCurrent?: string
+}
+export interface UserI {
+	name: string
+	email: string
+	$id: string
+}

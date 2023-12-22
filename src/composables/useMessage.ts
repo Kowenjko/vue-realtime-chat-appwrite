@@ -1,6 +1,5 @@
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { Models } from 'appwrite'
 
 import { MessageI } from '@/api/interfaces'
 import { filterObject } from '@/helpers/ArrayHelper'

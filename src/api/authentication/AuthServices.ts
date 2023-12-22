@@ -1,34 +1,37 @@
-import { ref } from 'vue'
 import { Models } from 'appwrite'
 import {
 	getAccount,
 	createEmailSession,
 	createAccount,
+	deleteSession,
 } from '@/api/authentication/AuthRepository'
+import { useChatStore } from '@/stores/useChatStore'
 import { handleException } from '@/api/helpers/HandleException'
-
-const isLoadingAuth = ref<boolean>(false)
 
 export const accountDetails =
 	async (): Promise<Models.User<Models.Preferences> | void> => {
-		isLoadingAuth.value = true
+		const { setIsLoading, setUserInfo } = useChatStore()
+		setIsLoading('auth', true)
 		try {
-			return await getAccount()
+			const userInfo = await getAccount()
+			setUserInfo(userInfo)
+			return userInfo
 		} catch (e) {
 			handleException(e)
 		} finally {
-			isLoadingAuth.value = false
+			setIsLoading('auth', false)
 		}
 	}
 
 export const loginUser = async (email: string, password: string) => {
-	isLoadingAuth.value = true
+	const { setIsLoading } = useChatStore()
+	setIsLoading('auth', true)
 	try {
 		await createEmailSession(email, password)
 	} catch (e) {
 		handleException(e)
 	} finally {
-		isLoadingAuth.value = false
+		setIsLoading('auth', false)
 	}
 }
 
@@ -37,12 +40,26 @@ export const registerUser = async (
 	password: string,
 	name: string
 ) => {
-	isLoadingAuth.value = true
+	const { setIsLoading } = useChatStore()
+	setIsLoading('auth', true)
 	try {
 		await createAccount(email, password, name)
 	} catch (e) {
 		handleException(e)
 	} finally {
-		isLoadingAuth.value = false
+		setIsLoading('auth', false)
+	}
+}
+
+export const logoutUser = async () => {
+	const { setIsLoading, setUserInfo } = useChatStore()
+	setIsLoading('auth', true)
+	try {
+		await deleteSession()
+		setUserInfo(null)
+	} catch (e) {
+		handleException(e)
+	} finally {
+		setIsLoading('auth', false)
 	}
 }

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onUnmounted } from 'vue'
 
+import Header from '@/components/Header.vue'
+
 import { ArchiveBoxXMarkIcon } from '@heroicons/vue/24/solid'
 import { useMessage } from '@/composables/useMessage'
 
@@ -11,7 +13,8 @@ onUnmounted(() => unsubscribe())
 </script>
 <template>
 	<main class="container">
-		<div v-if="isLoading?.status">Loading ...</div>
+		<Header />
+		<div v-if="isLoading?.status">{{ isLoading.action }} ...</div>
 		<div class="room--container">
 			<form id="message--form" @submit.prevent="handleSubmit">
 				<div>

@@ -3,6 +3,8 @@ import HomeView from '@/views/Home.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 
+import { useChatStore } from '@/stores/useChatStore'
+
 const router = createRouter({
 	history: createWebHistory(),
 	routes: [
@@ -10,6 +12,10 @@ const router = createRouter({
 			path: '/',
 			name: 'home',
 			component: HomeView,
+			beforeEnter: () => {
+				const userStore = useChatStore()
+				return userStore.userInfo ? true : '/login'
+			},
 		},
 		{
 			path: '/login',

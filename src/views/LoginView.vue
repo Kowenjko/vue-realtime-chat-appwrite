@@ -1,6 +1,55 @@
-<script setup lang="ts"></script>
-<template>
-	<div>Login</div>
-</template>
+<script setup lang="ts">
+import { reactive, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
-<style scoped></style>
+import { useAuthUser } from '@/composables/useAuthUser'
+import { AuthI } from '@/api/interfaces'
+
+const router = useRouter()
+
+const { handleUserLogin, isLoading, userInfo } = await useAuthUser()
+
+const forms = reactive<AuthI>({ email: '', password: '' })
+
+watch(userInfo, (value) => value && router.push('/'))
+</script>
+<template>
+	<div class="auth--container">
+		<div class="form--wrapper">
+			<p v-if="isLoading.status">{{ isLoading.action }} ...</p>
+			<form @submit.prevent="handleUserLogin(forms)">
+				<div class="field--wrapper">
+					<label>Email:</label>
+					<input
+						required
+						type="email"
+						name="email"
+						placeholder="Enter your email..."
+						v-model.trim="forms.email"
+					/>
+				</div>
+
+				<div class="field--wrapper">
+					<label>Password:</label>
+					<input
+						required
+						type="password"
+						name="password"
+						placeholder="Enter password..."
+						v-model.trim="forms.password"
+					/>
+				</div>
+
+				<div class="field--wrapper">
+					<input type="submit" value="Login" class="btn btn--lg btn--main" />
+				</div>
+			</form>
+
+			<p>
+				Dont have an account? Register
+				<router-link to="/register">here</router-link>
+			</p>
+		</div>
+	</div>
+	>
+</template>
